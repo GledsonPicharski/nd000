@@ -8,3 +8,8 @@ def draw_square():
         jack.right(90)
 
 draw_square()
+
+for square in range(80):
+    draw_square()
+    jack.forward(5)
+    jack.left(5)
