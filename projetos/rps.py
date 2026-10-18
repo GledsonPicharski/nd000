@@ -16,13 +16,20 @@ def beats(one, two):
 
 class Player:
     """The Player class is the parent class for all of the Players
-    in this game. It always plays 'rock'."""
+    in this game. Each subclass implements its own strategy."""
 
     def move(self):
         return 'rock'
 
     def learn(self, my_move, their_move):
         pass
+
+
+class RockPlayer(Player):
+    """Always plays 'rock'."""
+
+    def move(self):
+        return 'rock'
 
 
 class RandomPlayer(Player):
@@ -77,9 +84,11 @@ class CyclePlayer(Player):
 
 
 class Game:
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, rounds=3):
         self.p1 = p1
         self.p2 = p2
+        self.rounds = rounds
+        self.rounds_played = 0
         self.score1 = 0
         self.score2 = 0
 
@@ -100,16 +109,17 @@ class Game:
               f"Player Two {self.score2}\n")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
+        self.rounds_played += 1
 
-    def play_game(self, rounds=3):
+    def play_game(self):
         print("Rock Paper Scissors, Go!\n")
-        for round in range(1, rounds + 1):
+        for round in range(1, self.rounds + 1):
             print(f"Round {round}:")
             self.play_round()
         self.announce_winner()
 
     def announce_winner(self):
-        print("Game over!")
+        print(f"Game over! Rounds played: {self.rounds_played}")
         print(f"Final score: Player One {self.score1}, "
               f"Player Two {self.score2}")
         if self.score1 > self.score2:
@@ -122,7 +132,7 @@ class Game:
 
 def choose_opponent():
     opponents = {
-        '1': ('Rock player', Player),
+        '1': ('Rock player', RockPlayer),
         '2': ('Random player', RandomPlayer),
         '3': ('Reflect player', ReflectPlayer),
         '4': ('Cycle player', CyclePlayer),
@@ -145,11 +155,15 @@ def choose_rounds():
         print("Please enter a positive whole number.")
 
 
-if __name__ == '__main__':
+def main():
     try:
         opponent = choose_opponent()
         rounds = choose_rounds()
-        game = Game(HumanPlayer(), opponent)
-        game.play_game(rounds)
+        game = Game(HumanPlayer(), opponent, rounds)
+        game.play_game()
     except (KeyboardInterrupt, EOFError):
         print("\nGame interrupted. Goodbye!")
+
+
+if __name__ == '__main__':
+    main()
