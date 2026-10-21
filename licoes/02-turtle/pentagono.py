@@ -8,3 +8,5 @@ for side in range(5):
     amy.right(72)
 
 turtle.done()
+
+
