@@ -35,6 +35,9 @@ const cart = [];
 /* Total cash received from the customer for the current purchase */
 let totalPaid = 0;
 
+/* Difference between the cash received and the cart total */
+let remainingBalance = 0;
+
 /* Returns the product with the given productId from the given list */
 function getProductById(productId, productList) {
   return productList.find((product) => product.productId === productId);
@@ -99,7 +102,7 @@ function emptyCart() {
 */
 function pay(amount) {
   totalPaid += amount;
-  const remainingBalance = totalPaid - cartTotal();
+  remainingBalance = totalPaid - cartTotal();
 
   if (remainingBalance >= 0) {
     totalPaid = 0;
