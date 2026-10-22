@@ -32,9 +32,6 @@ const products = [
 /* Products currently in the cart */
 const cart = [];
 
-/* Running total of cash received for the current purchase */
-let totalPaid = 0;
-
 /* Returns the product with the given productId from the given list */
 function getProductById(productId, productList) {
   return productList.find((product) => product.productId === productId);
@@ -97,14 +94,7 @@ function emptyCart() {
    - positive or zero: change to be returned to the customer
 */
 function pay(amount) {
-  totalPaid += amount;
-  const difference = totalPaid - cartTotal();
-
-  if (difference >= 0) {
-    totalPaid = 0;
-  }
-
-  return difference;
+  return amount - cartTotal();
 }
 
 module.exports = {
