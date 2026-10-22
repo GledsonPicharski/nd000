@@ -32,6 +32,9 @@ const products = [
 /* Products currently in the cart */
 const cart = [];
 
+/* Total cash received from the customer for the current purchase */
+let totalPaid = 0;
+
 /* Returns the product with the given productId from the given list */
 function getProductById(productId, productList) {
   return productList.find((product) => product.productId === productId);
@@ -92,9 +95,18 @@ function emptyCart() {
 /* Receives a cash payment and returns the difference from the cart total
    - negative: remaining balance still owed by the customer
    - positive or zero: change to be returned to the customer
+   Once the purchase is fully paid, the payment and the cart are reset
 */
 function pay(amount) {
-  return amount - cartTotal();
+  totalPaid += amount;
+  const remainingBalance = totalPaid - cartTotal();
+
+  if (remainingBalance >= 0) {
+    totalPaid = 0;
+    emptyCart();
+  }
+
+  return remainingBalance;
 }
 
 module.exports = {
